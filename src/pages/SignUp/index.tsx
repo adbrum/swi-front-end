@@ -17,7 +17,7 @@ import { Container, Content, AnimationContainer, Background } from './styles';
 interface SignUpFormData {
   username: string;
   email: string;
-  password1: string;
+  password: string;
   password2: string;
 }
 
@@ -35,9 +35,9 @@ const SignUp: React.FC = () => {
           email: Yup.string()
             .email('Enter a valid email address')
             .required('Required email'),
-          password1: Yup.string().min(6, 'at least 6 digits'),
+          password: Yup.string().min(6, 'at least 6 digits'),
           password2: Yup.string().oneOf(
-            [Yup.ref('password1'), null],
+            [Yup.ref('password'), null],
             'Passwords must match',
           ),
         });
@@ -45,9 +45,9 @@ const SignUp: React.FC = () => {
           abortEarly: false,
         });
 
-        await api.post('/auth/registration/', data);
+        console.log(data);
 
-        // console.log(data);
+        await api.post('/users/register/', data);
 
         history.push('/');
       } catch (err) {
@@ -74,7 +74,7 @@ const SignUp: React.FC = () => {
             <Input name="email" icon={FiMail} placeholder="E-mail" />
 
             <Input
-              name="password1"
+              name="password"
               type="password"
               icon={FiLock}
               placeholder="Password"

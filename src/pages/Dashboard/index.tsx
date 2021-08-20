@@ -5,7 +5,7 @@ import { useAuth } from '../../hooks/auth';
 // import { Container } from './styles';
 
 const Dashboard: React.FC = () => {
-  const { signOut, key } = useAuth();
+  const { signOut } = useAuth();
   return (
     <>
       <h1>Dashboard</h1>

@@ -41,7 +41,7 @@ const SignIn: React.FC = () => {
         });
 
         signIn({
-          email: data.email,
+          username: data.email,
           password: data.password,
         });
 
