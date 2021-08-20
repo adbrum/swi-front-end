@@ -3,7 +3,9 @@ import { FiArrowLeft, FiMail, FiUser, FiLock } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+
+import api from '../../services/api';
 
 import getValidationErrors from '../../utils/getValidationErrors';
 
@@ -12,29 +14,53 @@ import Button from '../../components/Button';
 
 import { Container, Content, AnimationContainer, Background } from './styles';
 
+interface SignUpFormData {
+  username: string;
+  email: string;
+  password1: string;
+  password2: string;
+}
+
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
-  console.log(formRef);
+  const history = useHistory();
 
-  const handleSubmit = useCallback(async data => {
-    try {
-      formRef.current?.setErrors({});
+  const handleSubmit = useCallback(
+    async (data: SignUpFormData) => {
+      try {
+        formRef.current?.setErrors({});
 
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Required name'),
-        email: Yup.string()
-          .email('Enter a valid email address')
-          .required('Required email'),
-        password: Yup.string().min(6, 'at least 6 digits'),
-      });
-      await schema.validate(data, {
-        abortEarly: false,
-      });
-    } catch (err) {
-      const errors = getValidationErrors(err);
-      formRef.current?.setErrors(errors);
-    }
-  }, []);
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Required name'),
+          email: Yup.string()
+            .email('Enter a valid email address')
+            .required('Required email'),
+          password1: Yup.string().min(6, 'at least 6 digits'),
+          password2: Yup.string().oneOf(
+            [Yup.ref('password1'), null],
+            'Passwords must match',
+          ),
+        });
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+
+        await api.post('/auth/registration/', data);
+
+        // console.log(data);
+
+        history.push('/');
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+          formRef.current?.setErrors(errors);
+
+          // return;
+        }
+      }
+    },
+    [history],
+  );
 
   return (
     <Container>
@@ -48,7 +74,14 @@ const SignUp: React.FC = () => {
             <Input name="email" icon={FiMail} placeholder="E-mail" />
 
             <Input
-              name="password"
+              name="password1"
+              type="password"
+              icon={FiLock}
+              placeholder="Password"
+            />
+
+            <Input
+              name="password2"
               type="password"
               icon={FiLock}
               placeholder="Password"
