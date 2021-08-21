@@ -48,12 +48,19 @@ export default function Home() {
                 </Form>
               )}
             </Formik>
-            <Button type="button" onClick={signOut}>
-              <FiPower />
-              Exit
-            </Button>
           </CardContent>
         </Card>
+        <CardContent>
+          <Button
+            onClick={signOut}
+            variant="contained"
+            color="primary"
+            type="button"
+          >
+            <FiPower />
+            Exit
+          </Button>
+        </CardContent>
       </Content>
     </Container>
   );

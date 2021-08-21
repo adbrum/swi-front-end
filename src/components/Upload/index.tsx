@@ -9,15 +9,10 @@ import { UploadError } from './UploadError';
 let currentId = 0;
 
 function getNewId() {
-  // we could use a fancier solution instead of a sequential ID :)
-
   return ++currentId;
 }
 
 export interface UploadableFile {
-  // id was added after the video being released to fix a bug
-  // Video with the bug -> https://youtube-2021-feb-multiple-file-upload-formik-bmvantunes.vercel.app/bug-report-SMC-Alpha-thank-you.mov
-  // Thank you for the bug report SMC Alpha - https://www.youtube.com/channel/UC9C4AlREWdLoKbiLNiZ7XEA
   id: number;
   file: File;
   errors: FileError[];
