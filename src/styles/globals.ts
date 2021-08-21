@@ -1,5 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 
+import 'react-circular-progressbar/dist/styles.css';
+
 export default createGlobalStyle`
   * {
     margin: 0;
@@ -10,6 +12,7 @@ export default createGlobalStyle`
   body {
     background: #312e38;
     color: #FFF;
+    text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
   body, input, button {
