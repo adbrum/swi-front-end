@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FiPower } from 'react-icons/fi';
 import { Button, Card, CardContent, Grid } from '@material-ui/core';
 import { Form, Formik } from 'formik';
@@ -6,9 +6,21 @@ import { array, object, string } from 'yup';
 import { useAuth } from '../../hooks/auth';
 import { Container, Content } from './styles';
 import { MultipleFileUploadField } from '../../components/Upload/index';
+import api from '../../services/api';
 
-export default function Home() {
-  const { signOut, token } = useAuth();
+const Dashboard: React.FC = () => {
+  const { signOut } = useAuth();
+
+  const handleSubmit = (values, actions) => {
+    console.log('DATA: ', values);
+    api
+      .post('/images/lead/', values)
+      .then(response => console.log(response))
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
+  };
+
   return (
     <Container>
       <Content>
@@ -20,19 +32,16 @@ export default function Home() {
                 files: array(
                   object({
                     url: string().required(),
+                    token: object(),
                   }),
                 ),
               })}
-              onSubmit={values => {
-                console.log('values', values);
-                return new Promise(res => setTimeout(res, 2000));
-              }}
+              onSubmit={handleSubmit}
             >
               {({ values, errors, isValid, isSubmitting }) => (
                 <Form>
                   <Grid container spacing={2} direction="column">
                     <MultipleFileUploadField name="files" />
-
                     <Grid item>
                       <Button
                         variant="contained"
@@ -64,4 +73,6 @@ export default function Home() {
       </Content>
     </Container>
   );
-}
+};
+
+export default Dashboard;

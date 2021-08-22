@@ -1,10 +1,12 @@
 /* eslint-disable no-plusplus */
 import React, { useCallback, useEffect, useState } from 'react';
+import jwt_decode from 'jwt-decode';
 import { Grid, makeStyles } from '@material-ui/core';
 import { useField } from 'formik';
 import { FileError, FileRejection, useDropzone } from 'react-dropzone';
 import { SingleFileUploadWithProgress } from './UploadProgress';
 import { UploadError } from './UploadError';
+import { useAuth } from '../../hooks/auth';
 
 let currentId = 0;
 
@@ -17,6 +19,7 @@ export interface UploadableFile {
   file: File;
   errors: FileError[];
   url?: string;
+  token: string;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -33,6 +36,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export function MultipleFileUploadField({ name }: { name: string }) {
+  const { token } = useAuth();
+  const token1 = jwt_decode(token);
   const [_, __, helpers] = useField(name);
   const classes = useStyles();
 
@@ -42,8 +47,13 @@ export function MultipleFileUploadField({ name }: { name: string }) {
       file,
       errors: [],
       id: getNewId(),
+      token: jwt_decode(token),
     }));
-    const mappedRej = rejFiles.map(r => ({ ...r, id: getNewId() }));
+    const mappedRej = rejFiles.map(r => ({
+      ...r,
+      id: getNewId(),
+      token,
+    }));
     setFiles(curr => [...curr, ...mappedAcc, ...mappedRej]);
   }, []);
 
