@@ -37,7 +37,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
     const { key } = response.data;
 
-    console.log(key);
+    // console.log(key);
 
     localStorage.setItem('@SWI:key', key);
     // localStorage.setItem('@SWI:username', JSON.stringify(username));

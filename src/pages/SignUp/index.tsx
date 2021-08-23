@@ -45,7 +45,7 @@ const SignUp: React.FC = () => {
           abortEarly: false,
         });
 
-        console.log(data);
+        // console.log(data);
 
         await api.post('/users/register/', data);
 

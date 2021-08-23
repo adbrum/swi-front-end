@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
+import jwt_decode from 'jwt-decode';
 import { FiPower } from 'react-icons/fi';
 import { Button, Card, CardContent, Grid } from '@material-ui/core';
 import { Form, Formik } from 'formik';
@@ -9,9 +10,19 @@ import { MultipleFileUploadField } from '../../components/Upload/index';
 import Image from '../../components/Image';
 import api from '../../services/api';
 
-const Dashboard: React.FC = () => {
+interface Props {
+  id_user: number;
+}
+
+const Dashboard: React.FC<any> = ({ id_user }: Props) => {
   const { signOut, token } = useAuth();
   const [images, setImages] = useState([]);
+
+  // const user = jwt_decode(token);
+
+  // useEffect(() => {
+  //   handleImage(user.user_id);
+  // }, []);
 
   const handleSubmit = useCallback(values => {
     api

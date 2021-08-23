@@ -40,7 +40,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
     localStorage.setItem('@SWI:token', token);
 
-    console.log(response.data);
+    // console.log(response.data);
 
     setData({ token: jwt_decode(token) });
 
