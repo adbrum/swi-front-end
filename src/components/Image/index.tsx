@@ -2,9 +2,13 @@ import React from 'react';
 import Carousel from 'react-gallery-carousel';
 import 'react-gallery-carousel/dist/index.css';
 
-const Image = () => {
-  const images = [9, 8, 7, 6, 5].map(number => ({
-    src: `https://placedog.net/${number}00/${number}00?id=${number}`,
+interface Props {
+  img: any;
+}
+
+const Image = ({ img }: Props) => {
+  const images = img.map(item => ({
+    src: item.url,
   }));
 
   return <Carousel images={images} style={{ height: 500, width: 800 }} />;

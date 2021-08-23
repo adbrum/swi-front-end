@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FiPower } from 'react-icons/fi';
 import { Button, Card, CardContent, Grid } from '@material-ui/core';
 import { Form, Formik } from 'formik';
@@ -11,11 +11,22 @@ import api from '../../services/api';
 
 const Dashboard: React.FC = () => {
   const { signOut, token } = useAuth();
+  const [images, setImages] = useState([]);
 
   const handleSubmit = useCallback(values => {
     api
       .post('/images/create/', values)
-      .then(response => console.log(response))
+      .then(response => handleImage(response.data.user_id))
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
+  }, []);
+
+  const handleImage = useCallback(id => {
+    api
+      .get(`/images/list/${id}/`)
+      .then(response => setImages(response.data))
+      // .then(response => console.log(response.data))
       .catch(error => {
         console.error('There was an error!', error);
       });
@@ -24,7 +35,7 @@ const Dashboard: React.FC = () => {
   return (
     <Container>
       <Content>
-        <Image />
+        <Image img={images} />
         <Card>
           <CardContent>
             <Formik
