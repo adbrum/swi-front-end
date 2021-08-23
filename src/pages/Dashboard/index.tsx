@@ -6,24 +6,25 @@ import { array, object, string } from 'yup';
 import { useAuth } from '../../hooks/auth';
 import { Container, Content } from './styles';
 import { MultipleFileUploadField } from '../../components/Upload/index';
+import Image from '../../components/Image';
 import api from '../../services/api';
 
 const Dashboard: React.FC = () => {
-  const { signOut } = useAuth();
+  const { signOut, token } = useAuth();
 
-  const handleSubmit = (values, actions) => {
-    console.log('DATA: ', values);
+  const handleSubmit = useCallback(values => {
     api
-      .post('/images/lead/', values)
+      .post('/images/create/', values)
       .then(response => console.log(response))
       .catch(error => {
         console.error('There was an error!', error);
       });
-  };
+  }, []);
 
   return (
     <Container>
       <Content>
+        <Image />
         <Card>
           <CardContent>
             <Formik
@@ -32,7 +33,6 @@ const Dashboard: React.FC = () => {
                 files: array(
                   object({
                     url: string().required(),
-                    token: object(),
                   }),
                 ),
               })}
@@ -53,7 +53,7 @@ const Dashboard: React.FC = () => {
                       </Button>
                     </Grid>
                   </Grid>
-                  <pre>{JSON.stringify({ values, errors }, null, 4)}</pre>
+                  {/* <pre>{JSON.stringify({ values, errors }, null, 4)}</pre> */}
                 </Form>
               )}
             </Formik>

@@ -19,7 +19,7 @@ export interface UploadableFile {
   file: File;
   errors: FileError[];
   url?: string;
-  token: string;
+  token: unknown;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -37,7 +37,6 @@ const useStyles = makeStyles(theme => ({
 
 export function MultipleFileUploadField({ name }: { name: string }) {
   const { token } = useAuth();
-  const token1 = jwt_decode(token);
   const [_, __, helpers] = useField(name);
   const classes = useStyles();
 
@@ -47,7 +46,7 @@ export function MultipleFileUploadField({ name }: { name: string }) {
       file,
       errors: [],
       id: getNewId(),
-      token: jwt_decode(token),
+      token: { token },
     }));
     const mappedRej = rejFiles.map(r => ({
       ...r,
