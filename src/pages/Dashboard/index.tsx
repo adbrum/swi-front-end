@@ -18,11 +18,14 @@ const Dashboard: React.FC<any> = ({ id_user }: Props) => {
   const { signOut, token } = useAuth();
   const [images, setImages] = useState([]);
 
-  // const user = jwt_decode(token);
+  // console.log(token);
 
-  // useEffect(() => {
-  //   handleImage(user.user_id);
-  // }, []);
+  const a = Object.values(token);
+  const user_id = a[a.length - 1];
+
+  useEffect(() => {
+    handleImage(user_id);
+  }, []);
 
   const handleSubmit = useCallback(values => {
     api
@@ -33,7 +36,7 @@ const Dashboard: React.FC<any> = ({ id_user }: Props) => {
       });
   }, []);
 
-  const handleImage = useCallback(id => {
+  const handleImage = useCallback((id = user_id) => {
     api
       .get(`/images/list/${id}/`)
       .then(response => setImages(response.data))
@@ -70,6 +73,7 @@ const Dashboard: React.FC<any> = ({ id_user }: Props) => {
                         color="primary"
                         disabled={!isValid || isSubmitting}
                         type="submit"
+                        onClick={handleImage}
                       >
                         Submit
                       </Button>
